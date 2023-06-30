@@ -1,4 +1,9 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+import { FOO_SYMBOL, foo } from './services/foo.service';
 
-createApp(App).mount('#app')
+const app = createApp(App);
+
+app.provide(FOO_SYMBOL, foo);
+
+app.mount('#app');

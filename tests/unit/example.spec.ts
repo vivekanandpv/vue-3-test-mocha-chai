@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import HelloWorld from '@/components/HelloWorld.vue';
+import { FOO_SYMBOL } from '@/services/foo.service';
 
 describe.only('HelloWorld.vue', () => {
   it('renders props.msg when passed', () => {
@@ -43,5 +44,24 @@ describe.only('HelloWorld.vue', () => {
       .text();
 
     expect(counterSpanText).to.equal('1');
+  });
+
+  it('renders message from the injection', () => {
+    const msg = 'new message';
+    const wrapper = shallowMount(HelloWorld, {
+      props: { msg },
+      global: {
+        //  proving a mock implementation for test
+        provide: {
+          [FOO_SYMBOL]: () => {
+            return 'Foo MOCK';
+          },
+        },
+      },
+    });
+
+    //  By default, there is no injection!
+    const injectText = wrapper.find('[data-testid = "inject-output"]').text();
+    expect(injectText).to.equal('Foo MOCK');
   });
 });
